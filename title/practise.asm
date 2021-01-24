@@ -48,12 +48,17 @@ TStartGame:
     lda #$2
     sta NumberofLives
 
+    lda Settables+3
+    eor #%00000001
+    sta $6603
+
     inc FetchNewGameTimerFlag ;set game timer flag to reload
 
     ; set the startup mode to enter the game immediately
     lda #1
-    sta OperMode
     sta IsPlaying
+    lda #2
+    sta OperMode
     lda #0
     sta OperMode_Task
     sta GameEngineSubroutine

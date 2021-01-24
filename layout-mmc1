@@ -1,6 +1,6 @@
 MEMORY
 {
-	TEMPWRAM:              start = $6000, size =   $100;
+	TEMPWRAM:              start = $7100, size =   $100;
 	MENUWRAM:              start = $7000, size =   $100;
 	PRACTISE_WRAMCODE:     start = $7E00, size =   $200;
 
@@ -11,7 +11,7 @@ MEMORY
 	PRACTISE_PRG0:         start = $8000, size =  $4000, fill=yes, fillval=$FF;
 	PRACTISE_PRG1:         start = $C000, size =  $3FFA, fill=yes, fillval=$FF;
 	PRACTISE_VEC:          start = $FFFA, size =     $6, fill=yes, fillval=$FF;
-	SMBCHR:                start =     0, size =  $2000, fill=yes, fillval=$FF;
+	SMBCHR:                start =     0, size =  $4000, fill=yes, fillval=$FF;
 }
 
 SEGMENTS

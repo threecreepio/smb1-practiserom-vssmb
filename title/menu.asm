@@ -1,4 +1,4 @@
-SettablesCount = $4
+SettablesCount = $5
 
 MenuReset:
     jsr DrawMenu
@@ -98,15 +98,17 @@ UpdateSelectedValueJE:
     .word UpdateValueWorldNumber ; world
     .word UpdateValueLevelNumber ; level
     .word UpdateValuePUps        ; p-up
+    .word UpdateValueTimer       ; timer
     .word UpdateValueFramerule   ; framerule
 
 DrawSelectedValueJE:
     tya
     jsr JumpEngine
-    .word DrawValueNormal    ; world
-    .word DrawValueNormal    ; level
-    .word DrawValueNormal    ; p-up
-    .word DrawValueFramerule ; framerule
+    .word DrawValueNormal          ; world
+    .word DrawValueNormal          ; level
+    .word DrawValueString_PUp          ; p-up
+    .word DrawValueString_Timer    ; timer
+    .word DrawValueFramerule       ; framerule
 
 UpdateValueWorldNumber:
     ldx #$FF
@@ -126,8 +128,7 @@ UpdateValueLevelNumber:
     lda HeldButtons
     and #%10000000
     bne @Skip
-    jsr BANK_LoadLevelCount
-    ldx LevelNumber
+    ldx #4
     @Skip:
     stx $0
     ldy #1
@@ -135,6 +136,11 @@ UpdateValueLevelNumber:
 
 UpdateValuePUps:
     lda #6
+    sta $0
+    jmp UpdateValueShared
+
+UpdateValueTimer:
+    lda #2
     sta $0
     jmp UpdateValueShared
 
@@ -161,6 +167,85 @@ UpdateValueShared:
 @Store:
     sta Settables, y
     rts
+
+PUpStrings:
+.word PUpStrings_Non
+.word PUpStrings_Spr
+.word PUpStrings_Fir
+.word PUpStrings_SNon
+.word PUpStrings_SSpr
+.word PUpStrings_SFir
+PUpStrings_Non:
+.byte "NONE "
+PUpStrings_Spr:
+.byte "SUPR "
+PUpStrings_Fir:
+.byte "FIRE "
+PUpStrings_SNon:
+.byte "NONE!"
+PUpStrings_SSpr:
+.byte "SUPR!"
+PUpStrings_SFir:
+.byte "FIRE!"
+
+DrawValueString_PUp:
+    lda Settables,y
+    asl a
+    tax
+    lda PUpStrings,x
+    sta $C0
+    lda PUpStrings+1,x
+    sta $C1
+    lda #5
+    sta $C2
+    jmp DrawValueString
+
+TimerStrings:
+.word TimerStrings_Fast
+.word TimerStrings_Slow
+TimerStrings_Fast:
+.byte "FAST"
+TimerStrings_Slow:
+.byte "SLOW"
+
+DrawValueString_Timer:
+    lda Settables,y
+    asl a
+    tax
+    lda TimerStrings,x
+    sta $C0
+    lda TimerStrings+1,x
+    sta $C1
+    lda #4
+    sta $C2
+    jmp DrawValueString
+
+DrawValueString:
+    clc
+    lda VRAM_Buffer1_Offset
+    tax
+    adc $C2
+    adc #3
+    sta VRAM_Buffer1_Offset
+    lda SettableRenderLocationsHi, y
+    sta VRAM_Buffer1+0, x
+    lda SettableRenderLocationsLo, y
+    sta VRAM_Buffer1+1, x
+    lda $C2
+    sta VRAM_Buffer1+2, x
+    ldy #0
+@CopyNext:
+    lda ($C0),y
+    sta VRAM_Buffer1+3, x
+    inx
+    iny
+    cpy $C2
+    bcc @CopyNext
+    lda #0
+    sta VRAM_Buffer1+4, x
+    rts
+
+
 
 DrawValueNormal:
     clc
@@ -250,6 +335,14 @@ DrawValueFramerule:
     sta VRAM_Buffer1+3+4, x
     rts
 
-.define SettableRenderLocations $20D3, $2113, $2153, $2190
+BaseLocation = $20D3
+
+.define SettableRenderLocations \
+    BaseLocation + ($40 * 0), \
+    BaseLocation + ($40 * 1), \
+    BaseLocation + ($40 * 2) - 3, \
+    BaseLocation + ($40 * 3) - 3, \
+    BaseLocation + ($40 * 4) - 3
+
 SettableRenderLocationsLo: .lobytes SettableRenderLocations
 SettableRenderLocationsHi: .hibytes SettableRenderLocations

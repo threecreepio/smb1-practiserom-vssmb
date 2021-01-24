@@ -1,4 +1,6 @@
 .p02
+; allow line continuation feature
+.linecont +
 .include "ascii.asm"
 .include "../const.inc"
 .import GL_ENTER
@@ -23,7 +25,7 @@ CachedITC: .byte $00
 PREVIOUS_BANK: .byte $00
 
 .segment "MENUWRAM"
-Settables: .byte $00, $00, $00, $00
+Settables: .byte $00, $00, $00, $00, $00, $00, $00
 MenuSelectedItem: .byte $00
 MenuSelectedSubitem: .byte $00
 MathDigits:
@@ -44,8 +46,6 @@ TitleReset3:
     stx PPU_CTRL_REG2
     jsr InitializeMemory
     jsr ForceClearWRAM
-    lda #8
-    sta MathFrameruleDigitStart
 :   lda PPU_STATUS
     bpl :-
 HotReset2:

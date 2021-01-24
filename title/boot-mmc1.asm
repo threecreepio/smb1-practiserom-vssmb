@@ -9,7 +9,7 @@ INES_VERTICAL_MIRROR = %00000001
 .segment "INES"
 .byte $4E,$45,$53,$1A ; NES
 .byte 16 ; prg
-.byte 1  ; chr
+.byte 2  ; chr
 .byte INES_MAPPER | INES_BATTERY | INES_VERTICAL_MIRROR
 
 .segment "PRACTISE_PRG1"

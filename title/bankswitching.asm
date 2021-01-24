@@ -34,7 +34,6 @@ RELOCATE_NonMaskableInterrupt:
 RELOCATE_GL_ENTER:
     jmp GL_ENTER
 
-
 BANK_SoundEngine:
 jsr BANK_TITLE_RTS
 jsr SoundEngine
@@ -109,35 +108,6 @@ FindAxe:
 @Exit:
     lda #1
 @Finish:
-    rts
-
-BANK_LoadLevelCount:
-    jsr BANK_GAME_RTS
-    ; copy out current world number
-    ldx WorldNumber
-    stx $2
-    lda Settables + 0
-    sta WorldNumber
-    lda #0
-    sta LevelNumber
-    sta AreaNumber
-@NextArea:
-    jsr RELOCATE_LoadAreaPointer
-    jsr BANK_LEVELBANK_RTS ; Refresh the game bank in case of GreatEd
-    jsr RELOCATE_GetAreaDataAddrs
-    inc AreaNumber
-    lda PlayerEntranceCtrl
-    and #%00000100
-    bne @Advance
-    inc LevelNumber ; only increment on non-cutscene levels
-    jsr FindAxe
-    beq @FoundAxe
-@Advance:
-    bne @NextArea
-@FoundAxe:
-    lda $2
-    sta WorldNumber
-    jmp BANK_TITLE_RTS
     rts
 
 ; scan through levels skipping over any autocontrol stages

@@ -1,7 +1,16 @@
-Practise ROM
-============
+VS SMB Practise ROM
+===================
 
-This patch adds a stage select, power-up and framerule selection to SMB.
+This patch adds a stage select, power-up and framerule selection to VS SMB.
+
+Get the latest version at https://github.com/threecreepio/smb1-practiserom-vssmb
+
+Known issues
+------------
+
+Vs. SMB breaks the normal framerule rng patterns from SMB1.
+
+There's as far as I can tell effectively no way to map out framerule rng in the game.. So, you can still select rng in the practise rom, but note that it won't match up with the real game.
 
 Usage
 -----
