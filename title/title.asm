@@ -191,6 +191,7 @@ ForceClearWRAM:
 .include "background.asm"
 .include "bankswitching.asm"
 .include "rng.asm"
+.include "../sound.asm"
 
 ROMSaveHeader:
 .byte $03, $20, $07, $21, $03

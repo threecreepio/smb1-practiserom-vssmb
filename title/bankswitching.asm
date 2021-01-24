@@ -16,6 +16,7 @@ InitBankSwitchingCode:
 .pushseg
 .segment "PRACTISE_WRAMCODE"
 .export BANK_PractiseNMI
+.export BANK_SoundEngine
 .export BANK_PractiseReset
 .export BANK_PractiseWriteBottomStatusLine
 .export BANK_PractiseWriteTopStatusLine
@@ -33,6 +34,11 @@ RELOCATE_NonMaskableInterrupt:
 RELOCATE_GL_ENTER:
     jmp GL_ENTER
 
+
+BANK_SoundEngine:
+jsr BANK_TITLE_RTS
+jsr SoundEngine
+jmp BANK_GAME_RTS
 
 BANK_PractiseNMI:
 jsr BANK_TITLE_RTS
